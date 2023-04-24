@@ -15,36 +15,36 @@ import static org.junit.Assert.assertTrue;
 
 public class SqlReportTemplateTest extends BaseIntegrationTest {
 
-	public SqlReportTemplateTest() {
-		super("src/test/resources/config/reports.json");
-	}
+    public SqlReportTemplateTest() {
+        super("src/test/resources/config/reports.json");
+    }
 
-	@Before
-	public void setUp() throws Exception {
-		executeDataSet("datasets/genericObservationReportDataSet.xml");
-	}
+    @Before
+    public void setUp() throws Exception {
+        executeDataSet("datasets/genericObservationReportDataSet.xml");
+    }
 
-	@Test
-	public void ensureThatTheDatatypeOfColumnsArePreserved() throws Exception {
-		String reportName = "ObsSqlReport";
-		JasperReportBuilder reportBuilder = fetchReportBuilder(reportName, "2016-04-01", "2016-04-30");
+    @Test
+    public void ensureThatTheDatatypeOfColumnsArePreserved() throws Exception {
+        String reportName = "ObsSqlReport";
+        JasperReportBuilder reportBuilder = fetchReportBuilder(reportName, "2016-04-01", "2016-04-30");
 
-		//obs_id
-		DRColumn<?> drColumn = reportBuilder.getReport().getColumns().get(0);
-		DRIComponent field1 = drColumn.getComponent();
-		assertTrue(field1 instanceof DRITextField);
-		assertTrue(((DRITextField)field1).getDataType() instanceof IntegerType);
+        //obs_id
+        DRColumn<?> drColumn = reportBuilder.getReport().getColumns().get(0);
+        DRIComponent field1 = drColumn.getComponent();
+        assertTrue(field1 instanceof DRITextField);
+        assertTrue(((DRITextField) field1).getDataType() instanceof IntegerType);
 
-		//value_numeric
-		drColumn = reportBuilder.getReport().getColumns().get(1);
-		field1 = drColumn.getComponent();
-		assertTrue(field1 instanceof DRITextField);
-		assertTrue(((DRITextField)field1).getDataType() instanceof DoubleType);
+        //value_numeric
+        drColumn = reportBuilder.getReport().getColumns().get(1);
+        field1 = drColumn.getComponent();
+        assertTrue(field1 instanceof DRITextField);
+        assertTrue(((DRITextField) field1).getDataType() instanceof DoubleType);
 
-		//value_text
-		drColumn = reportBuilder.getReport().getColumns().get(2);
-		field1 = drColumn.getComponent();
-		assertTrue(field1 instanceof DRITextField);
-		assertTrue(((DRITextField)field1).getDataType() instanceof StringType);
-	}
+        //value_text
+        drColumn = reportBuilder.getReport().getColumns().get(2);
+        field1 = drColumn.getComponent();
+        assertTrue(field1 instanceof DRITextField);
+        assertTrue(((DRITextField) field1).getDataType() instanceof StringType);
+    }
 }
