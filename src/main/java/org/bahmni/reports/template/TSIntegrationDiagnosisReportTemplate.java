@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
-import static org.bahmni.reports.template.Templates.columnStyle;
+import static org.bahmni.reports.template.Templates.minimalColumnStyle;
 import static org.bahmni.reports.util.FileReaderUtil.getFileContent;
 
 
@@ -72,22 +72,22 @@ public class TSIntegrationDiagnosisReportTemplate extends BaseReportTemplate<TSI
         String sql = getFileContent("sql/tsIntegrationDiagnosisCount.sql");
 
         CommonComponents.addTo(jasperReport, report, pageType);
-        jasperReport.addColumn(col.column(DIAGNOSIS_COLUMN_NAME, DIAGNOSIS_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
+        jasperReport.addColumn(col.column(DIAGNOSIS_COLUMN_NAME, DIAGNOSIS_COLUMN_NAME, type.stringType()).setStyle(minimalColumnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
         if (report.getConfig().isDisplayTerminologyCode()) {
             String terminologyConfigColumnName = report.getConfig().getTerminologyColumnName();
             String terminologyColumnName = StringUtils.isNotBlank(terminologyConfigColumnName) ? terminologyConfigColumnName : TERMINOLOGY_COLUMN_NAME;
-            jasperReport.addColumn(col.column(terminologyColumnName, TERMINOLOGY_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            jasperReport.addColumn(col.column(terminologyColumnName, TERMINOLOGY_COLUMN_NAME, type.stringType()).setStyle(minimalColumnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
         }
         if (report.getConfig().isDisplayGenderGroup()) {
-            jasperReport.addColumn(col.column(FEMALE_COLUMN_NAME, FEMALE_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
-            jasperReport.addColumn(col.column(MALE_COLUMN_NAME, MALE_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
-            jasperReport.addColumn(col.column(OTHER_COLUMN_NAME, OTHER_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
-            jasperReport.addColumn(col.column(NOT_DISCLOSED_COLUMN_NAME, NOT_DISCLOSED_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            jasperReport.addColumn(col.column(FEMALE_COLUMN_NAME, FEMALE_COLUMN_NAME, type.stringType()).setStyle(minimalColumnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            jasperReport.addColumn(col.column(MALE_COLUMN_NAME, MALE_COLUMN_NAME, type.stringType()).setStyle(minimalColumnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            jasperReport.addColumn(col.column(OTHER_COLUMN_NAME, OTHER_COLUMN_NAME, type.stringType()).setStyle(minimalColumnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
+            jasperReport.addColumn(col.column(NOT_DISCLOSED_COLUMN_NAME, NOT_DISCLOSED_COLUMN_NAME, type.stringType()).setStyle(minimalColumnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
         }
-        TextColumnBuilder<Integer> countTotal = col.column(COUNT_COLUMN_NAME, TOTAL_COLUMN_NAME, type.integerType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER);
-        jasperReport.addColumn(countTotal);
+        TextColumnBuilder<Integer> rowCount = col.column(COUNT_COLUMN_NAME, TOTAL_COLUMN_NAME, type.integerType()).setStyle(minimalColumnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER);
+        jasperReport.addColumn(rowCount);
         StyleBuilder subtotalStyle = stl.style().bold().setHorizontalAlignment(HorizontalAlignment.RIGHT);
-        AggregationSubtotalBuilder<Integer> totalCount = sbt.sum(countTotal)
+        AggregationSubtotalBuilder<Integer> totalCount = sbt.sum(rowCount)
                 .setLabel("Total")
                 .setLabelStyle(subtotalStyle);
         String formattedSql = getFormattedSql(sql, report.getConfig().getTsConceptSource(), startDate, endDate, tempTableName);
