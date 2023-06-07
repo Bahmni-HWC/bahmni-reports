@@ -3,6 +3,9 @@ package org.bahmni.reports.template;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.builder.subtotal.AggregationSubtotalBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.PageType;
 import net.sf.dynamicreports.report.constant.WhenNoDataType;
@@ -28,8 +31,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Properties;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.col;
-import static net.sf.dynamicreports.report.builder.DynamicReports.type;
+import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 import static org.bahmni.reports.template.Templates.columnStyle;
 import static org.bahmni.reports.util.FileReaderUtil.getFileContent;
 
@@ -82,9 +84,14 @@ public class TSIntegrationDiagnosisReportTemplate extends BaseReportTemplate<TSI
             jasperReport.addColumn(col.column(OTHER_COLUMN_NAME, OTHER_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
             jasperReport.addColumn(col.column(NOT_DISCLOSED_COLUMN_NAME, NOT_DISCLOSED_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
         }
-        jasperReport.addColumn(col.column(COUNT_COLUMN_NAME, TOTAL_COLUMN_NAME, type.stringType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER));
+        TextColumnBuilder<Integer> countTotal = col.column(COUNT_COLUMN_NAME, TOTAL_COLUMN_NAME, type.integerType()).setStyle(columnStyle).setHorizontalAlignment(HorizontalAlignment.CENTER);
+        jasperReport.addColumn(countTotal);
+        StyleBuilder subtotalStyle = stl.style().bold().setHorizontalAlignment(HorizontalAlignment.RIGHT);
+        AggregationSubtotalBuilder<Integer> totalCount = sbt.sum(countTotal)
+                .setLabel("Total")
+                .setLabelStyle(subtotalStyle);
         String formattedSql = getFormattedSql(sql, report.getConfig().getTsConceptSource(), startDate, endDate, tempTableName);
-        jasperReport.setShowColumnTitle(true).setWhenNoDataType(WhenNoDataType.ALL_SECTIONS_NO_DETAIL).setDataSource(formattedSql, connection);
+        jasperReport.setShowColumnTitle(true).setWhenNoDataType(WhenNoDataType.ALL_SECTIONS_NO_DETAIL).subtotalsAtSummary(totalCount).setDataSource(formattedSql, connection);
 
         return new BahmniReportBuilder(jasperReport);
     }
