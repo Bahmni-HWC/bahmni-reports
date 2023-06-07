@@ -45,6 +45,7 @@ public class TSIntegrationDiagnosisReportTemplate extends BaseReportTemplate<TSI
     public static final String OTHER_COLUMN_NAME = "Other";
     public static final String NOT_DISCLOSED_COLUMN_NAME = "Not disclosed";
     public static final String TOTAL_COLUMN_NAME = "Total";
+    public static final String COUNT_COLUMN_NAME = "Count";
     public static final int TS_DIAGNOSIS_LOOKUP_DEFAULT_PAGE_SIZE = 20;
     private static final Logger logger = LogManager.getLogger(TSIntegrationDiagnosisReportTemplate.class);
     private HttpClient httpClient;
