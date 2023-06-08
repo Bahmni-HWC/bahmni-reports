@@ -48,6 +48,7 @@ public class TSIntegrationDiagnosisReportTemplate extends BaseReportTemplate<TSI
     public static final String NOT_DISCLOSED_COLUMN_NAME = "Not disclosed";
     public static final String TOTAL_COLUMN_NAME = "Total";
     public static final String COUNT_COLUMN_NAME = "Count";
+    public static final String TOTAL_LABEL_NAME = "Total";
     public static final int TS_DIAGNOSIS_LOOKUP_DEFAULT_PAGE_SIZE = 20;
     private static final Logger logger = LogManager.getLogger(TSIntegrationDiagnosisReportTemplate.class);
     private HttpClient httpClient;
@@ -88,7 +89,7 @@ public class TSIntegrationDiagnosisReportTemplate extends BaseReportTemplate<TSI
         jasperReport.addColumn(rowCount);
         StyleBuilder subtotalStyle = stl.style().bold().setHorizontalAlignment(HorizontalAlignment.RIGHT);
         AggregationSubtotalBuilder<Integer> totalCount = sbt.sum(rowCount)
-                .setLabel("Total")
+                .setLabel(TOTAL_LABEL_NAME)
                 .setLabelStyle(subtotalStyle);
         String formattedSql = getFormattedSql(sql, report.getConfig().getTsConceptSource(), startDate, endDate, tempTableName);
         jasperReport.setShowColumnTitle(true).setWhenNoDataType(WhenNoDataType.ALL_SECTIONS_NO_DETAIL).subtotalsAtSummary(totalCount).setDataSource(formattedSql, connection);
