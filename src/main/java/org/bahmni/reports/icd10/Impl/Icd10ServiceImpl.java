@@ -35,7 +35,10 @@ public class Icd10ServiceImpl implements Icd10Service {
 
     public static void main(String[] args) {
 
-    //   searchMapRules("8619003",0,100,true);
+    //   searchMapRules("6705321000119109",0,100,true);
+        Icd10ServiceImpl icd = new Icd10ServiceImpl();
+        icd.getMapRules("16705321000119109",0,100,true);
+//        getMapRules("8619003",0,100,true);
 
     };
 
